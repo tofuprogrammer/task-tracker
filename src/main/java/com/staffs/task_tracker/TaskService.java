@@ -1,6 +1,5 @@
 package com.staffs.task_tracker;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,8 +8,11 @@ import java.util.List;
 
 public class TaskService {
 
-    @Autowired
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
+
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     public Task getTaskById(Long id) {
         return taskRepository.findById(id).orElse(null);
@@ -18,5 +20,24 @@ public class TaskService {
 
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
+    }
+
+    public Task createTask(Task task) {
+        return taskRepository.save(task);
+    }
+
+    public Task updateTask(Task task) {
+        Task taskToUpdate = taskRepository.findById(task.getId()).orElse(null);
+        if (taskToUpdate != null) {
+            taskToUpdate.setTitle(task.getTitle());
+            taskToUpdate.setDescription(task.getDescription());
+            taskToUpdate.setDone(task.getDone());
+            return taskRepository.save(taskToUpdate);
+        }
+        return null;
+    }
+
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
     }
 }
