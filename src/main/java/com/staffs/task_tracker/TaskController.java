@@ -40,7 +40,7 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
-        Task updatedTask = taskService.updateTask(task);
+        Task updatedTask = taskService.updateTask(id, task);
         if (updatedTask == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
